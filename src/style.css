@@ -22,23 +22,43 @@
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
     sans-serif;
 }
-
+input,
+textarea,
+select {
+  font-size: 16px !important; /* Bắt buộc phải là 16px trở lên */
+}
+/* Áp dụng cho tất cả các nút bấm và khu vực có thể click */
+button,
+.num-btn,
+.p-tab,
+.action-btn {
+  touch-action: manipulation;
+}
 body {
   background-color: var(--bg-main);
   color: var(--text-primary);
   min-height: 100vh;
 }
-
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%; /* Dùng 100% an toàn hơn 100dvh khi đã có position fixed */
+  overflow: hidden;
+  background-color: var(--bg-main);
+  position: fixed; /* QUAN TRỌNG NHẤT: Khóa chết màn hình trên iOS */
+}
 .app-container {
   width: 100%;
   max-width: 428px;
-  margin: 0 auto; /* Thêm dòng này để căn giữa ứng dụng trên màn hình máy tính */
+  margin: 0 auto;
+  height: 100dvh; /* Dùng dvh để tự động co giãn khi thanh URL Safari ẩn/hiện */
   background-color: var(--bg-main);
-  position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  overflow-x: hidden;
+  position: relative;
+  overflow: hidden; /* Khóa khung tổng, không cho tràn */
 }
 
 /* =========================================
@@ -49,10 +69,11 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  position: sticky;
-  top: 0;
   background-color: var(--bg-main);
-  z-index: 50;
+  /* ÉP HEADER LUÔN NỔI LÊN CAO NHẤT ĐỂ KHÔNG BỊ "BÓNG MA" CỦA NÚT DELETE XUYÊN QUA */
+  position: relative;
+  z-index: 999;
+  flex-shrink: 0;
 }
 
 .header-title {
@@ -96,7 +117,8 @@ body {
    ========================================= */
 .main-content {
   padding: 16px 20px 100px;
-  flex-grow: 1;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
 }
 /* Thay số 0 ban đầu thành 16px để đẩy danh sách xuống một chút cho thoáng mắt */
@@ -477,6 +499,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 .p-tab.active {
   background-color: var(--accent-orange);
@@ -502,8 +525,11 @@ body {
 .p-tab.active .p-score {
   color: #fff;
 }
-.p-tab.inactive .p-score {
+.p-score.positive {
   color: var(--accent-green);
+}
+.p-score.negative {
+  color: var(--accent-red);
 }
 
 .numpad {
@@ -521,6 +547,7 @@ body {
   font-size: 26px;
   font-weight: 500;
   color: #fff;
+  cursor: pointer;
 }
 .num-btn.action {
   font-size: 20px;
@@ -530,11 +557,11 @@ body {
   background-color: var(--accent-red);
   grid-column: span 1;
 }
-.num-btn.dark {
-  background-color: var(--bg-surface-light);
+.num-btn.green {
+  background-color: var(--accent-green);
   grid-column: span 2;
   font-size: 18px;
-  color: var(--text-secondary);
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -747,3 +774,128 @@ body {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
+
+/* =========================================
+   BẢNG ĐIỂM (SCOREBOARD)
+========================================= */
+.scoreboard-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: 16px;
+}
+
+/* Lưới tự động chia cột đều nhau. 
+   Lát nữa trong JS ta sẽ chèn style="grid-template-columns: repeat(n, 1fr);" */
+.score-grid-row {
+  display: grid;
+  gap: 6px;
+  padding: 0 8px;
+}
+
+/* --- HEADER NGƯỜI CHƠI --- */
+.player-header-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 4px;
+  border-radius: 8px;
+}
+
+/* Nền cho người đang có điểm Dương/Hoà */
+.bg-positive {
+  background-color: #1c2c1e; /* Xanh rêu đậm */
+  border: 1px solid rgba(48, 209, 88, 0.15);
+}
+
+/* Nền cho người đang có điểm Âm */
+.bg-negative {
+  background-color: #321c1d; /* Đỏ tía đậm */
+  border: 1px solid rgba(255, 69, 58, 0.15);
+}
+
+.player-name-text {
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+/* Cục Badge tổng điểm */
+.score-badge {
+  padding: 2px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+}
+.badge-positive {
+  background-color: #30d158;
+} /* Xanh lá iOS */
+.badge-negative {
+  background-color: #ff453a;
+} /* Đỏ iOS */
+
+/* --- CÁC HÀNG ĐIỂM TỪNG VÁN --- */
+.round-row {
+  display: grid;
+  padding: 14px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Nếu bạn muốn hàng chẵn/lẻ khác màu nhau cho dễ nhìn */
+.round-row.odd {
+  background-color: #1c1c1e;
+}
+.round-row.even {
+  background-color: transparent;
+}
+
+.score-cell {
+  text-align: center;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.hint-text {
+  text-align: center;
+  font-size: 13px;
+  color: #8e8e93;
+  font-style: italic;
+  margin-top: 20px;
+}
+
+/* =========================================
+   BOTTOM ACTIONS (2 NÚT DƯỚI CÙNG)
+========================================= */
+.bottom-actions-row {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  padding-bottom: 32px;
+}
+
+.btn-action {
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  color: white;
+}
+
+.btn-end {
+  background-color: #e24c4c;
+} /* Đỏ hồng */
+.btn-add {
+  background-color: #22c55e;
+} /* Xanh lá */

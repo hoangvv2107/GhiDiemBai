@@ -2,6 +2,7 @@ import { v7 } from "uuid";
 import { normalizationText } from "../../plugins/normalization-text";
 import router from "../../router";
 import { getVietnamTime } from "../../plugins/getVNTime";
+import { getData, postData } from "../../plugins/CRUD";
 
 export const tableInfo = () => {
   const app = document.getElementById("app");
@@ -126,19 +127,21 @@ export const tableInfo = () => {
     settings.showTotalScore =
       document.getElementById("show-total-score").checked;
     settings.balanceScore = document.getElementById("balance-score").checked;
-    const players = {};
+    const players = [];
     arrPlayerInput.forEach((playerInput) => {
       const idPlayer = playerInput.getAttribute("data-id");
-      players[idPlayer] = {};
-      players[idPlayer].namePlayer = playerInput.value;
-      players[idPlayer].score = [];
+      const player = {};
+      player.id = idPlayer;
+      player.namePlayer = playerInput.value;
+      player.score = [];
+      players.push(player);
     });
     info.settings = settings;
     info.players = players;
 
-    const saveData = JSON.parse(localStorage.getItem("game")) || [];
+    const saveData = getData();
     saveData.unshift(info);
-    localStorage.setItem("game", JSON.stringify(saveData));
+    postData(saveData);
     localStorage.setItem("currentGameId", info.id);
     router.navigate("/game");
   });
@@ -207,6 +210,7 @@ export const tableInfo = () => {
 
     playerBox.insertAdjacentHTML("beforeend", newPlayer);
     updatePlayer();
+    void playerBox.offsetHeight;
   });
 
   playerBox.addEventListener("click", (e) => {
@@ -215,6 +219,7 @@ export const tableInfo = () => {
       btnTarget.closest(".player-row").remove();
       playerCurr--;
       updatePlayer();
+      void playerBox.offsetHeight;
     }
   });
 
