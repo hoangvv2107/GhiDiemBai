@@ -44,21 +44,22 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%; /* Dùng 100% an toàn hơn 100dvh khi đã có position fixed */
-  overflow: hidden;
+  height: 100%;
+  overflow: hidden; /* Vẫn khóa cuộn ngoài */
   background-color: var(--bg-main);
-  position: fixed; /* QUAN TRỌNG NHẤT: Khóa chết màn hình trên iOS */
 }
 .app-container {
   width: 100%;
   max-width: 428px;
-  margin: 0 auto;
-  height: 100dvh; /* Dùng dvh để tự động co giãn khi thanh URL Safari ẩn/hiện */
   background-color: var(--bg-main);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto; /* Vẫn căn giữa hoàn hảo */
   display: flex;
   flex-direction: column;
-  position: relative;
-  overflow: hidden; /* Khóa khung tổng, không cho tràn */
 }
 
 /* =========================================

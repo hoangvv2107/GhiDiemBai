@@ -4,6 +4,23 @@ import router from "../../router";
 import { getVietnamTime } from "../../plugins/getVNTime";
 import { getData, postData } from "../../plugins/CRUD";
 
+// Khắc phục lỗi kẹt màn hình của iOS Safari khi tắt bàn phím
+document.addEventListener("focusout", function (e) {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
+    // Tăng thời gian chờ lên 300ms để đảm bảo iOS đã cất hẳn bàn phím
+    setTimeout(() => {
+      // 1. Kéo màn hình về vị trí ban đầu
+      window.scrollTo(0, 0);
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+
+      // 2. Tuyệt chiêu: Ép trình duyệt "giả vờ" như màn hình vừa bị xoay hoặc đổi kích thước
+      // Điều này ép Safari phải xóa bỏ khoảng trắng thừa và tính toán lại UI ngay lập tức
+      window.dispatchEvent(new Event("resize"));
+    }, 300);
+  }
+});
+
 export const tableInfo = () => {
   const app = document.getElementById("app");
   app.innerHTML = `<div class="app-container">
