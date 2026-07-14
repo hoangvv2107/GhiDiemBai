@@ -24,7 +24,7 @@ export const game = () => {
     </button>
   </header>
 
-  <main id="board-content" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column;">
+  <main id="board-content" style="flex: 1; overflow: hidden; min-height: 0; display: flex; flex-direction: column;">
   </main>
 
  <div id="bottom-actions" style="display: flex; gap: 12px; padding: 16px; padding-bottom: 32px;">    
@@ -85,20 +85,22 @@ export const game = () => {
     }
     namePlayer += `</div>`;
     hasScore += namePlayer;
-    let score = ``;
-    for (let i = 0; i < round; i++) {
+
+    let score = `<div class="round-row-box">`;
+    for (let i = round - 1; i >= 0; i--) {
       score += `<div class="round-row" data-id="${i}" style="grid-template-columns: repeat(${players.length}, 1fr);">`;
       for (const player of players) {
         score += `<div class="score-cell">${player.score[i]}</div>`;
       }
       score += `</div>`;
     }
+    score += `</div>`;
     hasScore += score;
     hasScore += `<div class="hint-text">Chạm vào ô để sửa điểm</div>
           </div>`;
 
     const final = round > 0 ? hasScore : noScore;
-    boardContent.insertAdjacentHTML("beforebegin", final);
+    boardContent.innerHTML = final;
   };
   renderTableRound();
 

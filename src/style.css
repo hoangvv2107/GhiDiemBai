@@ -26,6 +26,28 @@ input,
 textarea,
 select {
   font-size: 16px !important; /* Bắt buộc phải là 16px trở lên */
+  -webkit-appearance: none; /* Gỡ bỏ lớp vỏ làm chậm của iOS */
+  -webkit-user-select: text !important; /* Cho phép bôi đen chữ trong ô này */
+  user-select: text !important;
+  touch-action: manipulation !important;
+}
+
+html.unlock-scroll,
+body.unlock-scroll {
+  height: auto;
+  overflow: visible; /* Tháo xích cho Body */
+}
+
+body.unlock-scroll .app-container {
+  position: relative; /* Gỡ ghim */
+  height: auto;
+  min-height: 100dvh;
+}
+
+body.unlock-scroll .main-content {
+  flex: none;
+  min-height: auto;
+  overflow-y: visible; /* Hủy cuộn trong, dùng cuộn ngoài */
 }
 /* Áp dụng cho tất cả các nút bấm và khu vực có thể click */
 button,
@@ -45,21 +67,22 @@ body {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Vẫn khóa cuộn ngoài */
+  overflow: hidden; /* Khóa chặt không cho cuộn tổng */
   background-color: var(--bg-main);
 }
 .app-container {
   width: 100%;
   max-width: 428px;
-  background-color: var(--bg-main);
-  position: absolute;
+  margin: 0 auto;
+  height: 100dvh; /* Giới hạn đúng 1 màn hình */
+  display: flex;
+  flex-direction: column;
+  position: absolute; /* Ghim chặt ứng dụng */
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  margin: 0 auto; /* Vẫn căn giữa hoàn hảo */
-  display: flex;
-  flex-direction: column;
+  background-color: var(--bg-main);
 }
 
 /* =========================================
@@ -71,10 +94,10 @@ body {
   align-items: center;
   padding: 16px 20px;
   background-color: var(--bg-main);
-  /* ÉP HEADER LUÔN NỔI LÊN CAO NHẤT ĐỂ KHÔNG BỊ "BÓNG MA" CỦA NÚT DELETE XUYÊN QUA */
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 999;
-  flex-shrink: 0;
+  padding: calc(16px + env(safe-area-inset-top)) 20px 16px;
 }
 
 .header-title {
@@ -119,7 +142,7 @@ body {
 .main-content {
   padding: 16px 20px 100px;
   flex: 1;
-  min-height: 0;
+  min-height: 0; /* Ép thanh cuộn hiển thị bên trong */
   overflow-y: auto;
 }
 /* Thay số 0 ban đầu thành 16px để đẩy danh sách xuống một chút cho thoáng mắt */
@@ -689,15 +712,6 @@ body {
   font-weight: 500;
 }
 
-.hint-text {
-  text-align: center;
-  font-size: 13px;
-  color: var(--text-secondary);
-  font-style: italic;
-  margin-top: 24px;
-  padding-bottom: 100px;
-}
-
 /* Nút bấm đôi dưới cùng */
 .bottom-split {
   position: fixed;
@@ -781,6 +795,7 @@ body {
 ========================================= */
 .scoreboard-container {
   flex: 1;
+  min-height: 0; /* QUAN TRỌNG: Không có dòng này, thẻ sẽ phình to vô hạn */
   display: flex;
   flex-direction: column;
   padding-top: 16px;
@@ -840,10 +855,17 @@ body {
 } /* Đỏ iOS */
 
 /* --- CÁC HÀNG ĐIỂM TỪNG VÁN --- */
+.round-row-box {
+  flex: 1; /* QUAN TRỌNG: Ép tấm bạt chiếm phần không gian còn lại */
+  min-height: 0; /* QUAN TRỌNG: Khóa kích thước, không cho phình to */
+  overflow-y: auto; /* Bật thanh cuộn */
+  padding-bottom: 24px; /* Thêm một chút padding để ván cuối cùng không bị dính sát lề */
+}
 .round-row {
   display: grid;
   padding: 14px 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
 }
 
 /* Nếu bạn muốn hàng chẵn/lẻ khác màu nhau cho dễ nhìn */
