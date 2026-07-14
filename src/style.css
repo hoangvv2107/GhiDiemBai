@@ -2,18 +2,15 @@
    1. BIẾN MÀU SẮC & RESET
    ========================================= */
 :root {
-  --bg-main: #121212; /* Màu nền tối nhất */
-  --bg-surface: #242426; /* Màu nền các thẻ card, input */
-  --bg-surface-light: #3a3a3c; /* Màu nền nút bấm phụ */
+  --bg-main: #121212;
+  --bg-surface: #242426;
+  --bg-surface-light: #3a3a3c;
   --text-primary: #ffffff;
-  --text-secondary: #8a8a8e; /* Màu chữ xám */
-  --accent-green: #1db954; /* Xanh chủ đạo */
-  --accent-orange: #ff9f0a; /* Cam (tab người chơi) */
-  --accent-red: #ff453a; /* Đỏ (nút C) */
+  --text-secondary: #8a8a8e;
+  --accent-green: #1db954;
+  --accent-orange: #ff9f0a;
+  --accent-red: #ff453a;
   --border-color: rgba(255, 255, 255, 0.05);
-
-  --safe-top: max(16px, env(safe-area-inset-top));
-  --safe-bottom: max(24px, env(safe-area-inset-bottom));
 }
 
 * {
@@ -25,54 +22,52 @@
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
     sans-serif;
 }
+
 input,
 textarea,
 select {
-  font-size: 16px !important; /* Bắt buộc phải là 16px trở lên */
-  -webkit-appearance: none; /* Gỡ bỏ lớp vỏ làm chậm của iOS */
-  -webkit-user-select: text !important; /* Cho phép bôi đen chữ trong ô này */
+  font-size: 16px !important;
+  -webkit-appearance: none;
+  -webkit-user-select: text !important;
   user-select: text !important;
   touch-action: manipulation !important;
 }
 
+/* CƠ CHẾ CUỘN THẢ RÔNG */
 html.unlock-scroll,
 body.unlock-scroll {
   height: auto;
-  overflow: visible; /* Tháo xích cho Body */
+  overflow: visible;
 }
-
 body.unlock-scroll .app-container {
-  position: relative; /* Gỡ ghim */
+  position: relative;
   height: auto;
   min-height: 100dvh;
 }
-
 body.unlock-scroll .main-content {
   flex: none;
   min-height: auto;
-  overflow-y: visible; /* Hủy cuộn trong, dùng cuộn ngoài */
+  overflow-y: visible;
 }
-/* Áp dụng cho tất cả các nút bấm và khu vực có thể click */
+
 button,
 .num-btn,
 .p-tab,
 .action-btn {
   touch-action: manipulation;
 }
-body {
-  background-color: var(--bg-main);
-  color: var(--text-primary);
-  min-height: 100vh;
-}
+
 html,
 body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Khóa chặt không cho cuộn tổng */
+  overflow: hidden;
   background-color: var(--bg-main);
+  color: var(--text-primary);
 }
+
 .app-container {
   width: 100%;
   max-width: 428px;
@@ -139,16 +134,52 @@ body {
 }
 
 /* =========================================
-   3. TRANG 1: BẢNG CHƠI (DASHBOARD)
+   3. TRANG CHỦ & BOTTOM NAV
    ========================================= */
 .main-content {
   padding: 16px 20px 100px;
   flex: 1;
-  min-height: 0; /* Ép thanh cuộn hiển thị bên trong */
+  min-height: 0;
   overflow-y: auto;
 }
-/* Thay số 0 ban đầu thành 16px để đẩy danh sách xuống một chút cho thoáng mắt */
 
+/* TRẠNG THÁI TRỐNG MÀN HÌNH CHÍNH (MỚI THÊM) */
+.empty-home-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 20px 60px;
+}
+.empty-home-icon {
+  width: 80px;
+  height: 80px;
+  background-color: var(--bg-surface);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  color: var(--accent-green);
+}
+.empty-home-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.empty-home-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.empty-home-desc strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Các thẻ Game cũ */
 .btn-upgrade {
   width: 100%;
   background: #fff;
@@ -170,6 +201,7 @@ body {
   border-radius: 16px;
   padding: 16px;
   margin-bottom: 12px;
+  cursor: pointer;
 }
 .board-header {
   display: flex;
@@ -209,25 +241,27 @@ body {
   gap: 6px;
 }
 
+/* Avatar linh hoạt */
 .avatars {
   display: flex;
   gap: 6px;
+  flex-wrap: wrap;
 }
 .avatar {
-  width: 28px;
+  min-width: 28px;
   height: 28px;
   background-color: var(--bg-surface-light);
-  border-radius: 6px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 13px;
   font-weight: 600;
-}
-.avatar.dark {
-  background-color: #1c1c1e;
+  padding: 0 10px;
+  white-space: nowrap;
 }
 
+/* Bottom Nav */
 .bottom-nav-wrapper {
   position: fixed;
   bottom: 24px;
@@ -269,7 +303,7 @@ body {
 }
 
 /* =========================================
-   4. TRANG 2: TẠO BẢNG (FORMS)
+   4. TẠO BẢNG & FORMS
    ========================================= */
 .section-title {
   font-size: 14px;
@@ -343,7 +377,7 @@ body {
 .btn-remove-player {
   background: none;
   border: none;
-  color: #e24c4c; /* Màu đỏ */
+  color: #e24c4c;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -367,6 +401,9 @@ body {
   cursor: pointer;
 }
 
+/* =========================================
+   5. CÀI ĐẶT (SETTINGS)
+   ========================================= */
 .setting-group {
   background-color: var(--bg-surface);
   border-radius: 16px;
@@ -396,7 +433,6 @@ body {
   text-align: center;
   border-bottom: 1px solid var(--border-color);
 }
-
 .setting-item {
   display: flex;
   justify-content: space-between;
@@ -458,59 +494,38 @@ body {
   transform: translateX(20px);
 }
 
-/* =========================================
-   5. TRANG 3: EMPTY STATE
-   ========================================= */
-.empty-wrapper {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 100px;
-}
-.empty-icon {
-  width: 80px;
-  height: 80px;
-  background-color: var(--bg-surface);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  color: var(--text-secondary);
-}
-.empty-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-.empty-desc {
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.fixed-bottom {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 40px);
-  max-width: 388px;
-}
-.btn-primary {
-  width: 100%;
-  background-color: var(--accent-green);
-  color: #fff;
+.small-input {
+  background-color: var(--bg-surface-light);
   border: none;
-  padding: 16px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 8px 12px;
+  width: 70px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+}
+
+.btn-delete-board {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--accent-red);
+  background: none;
+  border: none;
+  width: 100%;
+  padding: 24px 16px 40px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 /* =========================================
-   6. TRANG 4: BÀN PHÍM (KEYBOARD)
+   6. BÀN PHÍM (KEYBOARD / NUMPAD)
    ========================================= */
 .player-tabs {
   display: flex;
@@ -595,223 +610,26 @@ body {
 }
 
 /* =========================================
-   GIAO DIỆN BẢNG ĐIỂM CHI TIẾT
+   7. BẢNG ĐIỂM CHI TIẾT (SCOREBOARD TABLE)
    ========================================= */
-.header-actions {
-  display: flex;
-  gap: 8px;
-}
-
-/* Khối trạng thái rỗng */
-.empty-wrapper {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 60vh; /* Tạo khoảng không để căn giữa */
-}
-.empty-icon {
-  width: 80px;
-  height: 80px;
-  background-color: var(--bg-surface);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  color: var(--text-secondary);
-}
-.empty-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-.empty-desc {
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.fixed-bottom {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 40px);
-  max-width: 388px;
-}
-.btn-primary {
-  width: 100%;
-  background-color: var(--accent-green);
-  color: #fff;
-  border: none;
-  padding: 16px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* Lưới Header Tên & Tổng điểm */
-.player-headers {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-bottom: 12px;
-}
-.player-col {
-  border-radius: 8px;
-  padding: 10px 4px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-.player-col.positive {
-  background-color: rgba(29, 185, 84, 0.05);
-  border: 1px solid rgba(29, 185, 84, 0.2);
-}
-.player-col.negative {
-  background-color: rgba(255, 69, 58, 0.05);
-  border: 1px solid rgba(255, 69, 58, 0.2);
-}
-.player-name {
-  font-size: 14px;
-  font-weight: 600;
-}
-.score-pill {
-  padding: 4px 14px;
-  border-radius: 16px;
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
-}
-.score-pill.green {
-  background-color: var(--accent-green);
-}
-.score-pill.red {
-  background-color: var(--accent-red);
-}
-
-/* Lưới lịch sử từng ván */
-.score-grid {
-  display: flex;
-  flex-direction: column;
-}
-.score-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  padding: 14px 0;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.score-row.highlight {
-  background-color: rgba(255, 69, 58, 0.15);
-}
-.score-cell {
-  text-align: center;
-  font-size: 15px;
-  font-weight: 500;
-}
-
-/* Nút bấm đôi dưới cùng */
-.bottom-split {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 40px);
-  max-width: 388px;
-  display: flex;
-  gap: 12px;
-  z-index: 100;
-}
-.btn-half {
-  flex: 1;
-  padding: 16px;
-  border-radius: 12px;
-  border: none;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-.btn-half.red {
-  background-color: var(--accent-red);
-}
-.btn-half.green {
-  background-color: var(--accent-green);
-}
-
-/* =========================================
-   8. TRANG CÀI ĐẶT (SETTINGS)
-   ========================================= */
-
-/* Nút "Lưu" tối màu trên Header */
-.btn-pill.dark {
-  background-color: var(--bg-surface);
-  color: var(--text-secondary);
-}
-.btn-pill.dark.active {
-  color: var(--text-primary); /* Đổi màu sáng lên khi có thay đổi để bấm lưu */
-}
-
-/* Form nhập số nhỏ (Giới hạn ván / điểm) */
-.small-input {
-  background-color: var(--bg-surface-light);
-  border: none;
-  color: var(--text-primary);
-  border-radius: 8px;
-  padding: 8px 12px;
-  width: 70px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 500;
-  outline: none;
-}
-
-/* Nút Xóa bảng chơi dưới cùng */
-.btn-delete-board {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  color: var(--accent-red);
-  background: none;
-  border: none;
-  width: 100%;
-  padding: 24px 16px 40px; /* Padding dưới to ra một chút cho thoáng */
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
-/* =========================================
-   BẢNG ĐIỂM (SCOREBOARD)
-========================================= */
 .scoreboard-container {
   flex: 1;
-  min-height: 0; /* QUAN TRỌNG: Không có dòng này, thẻ sẽ phình to vô hạn */
-  display: flex;
-  flex-direction: column;
-  padding-top: 16px;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 24px;
+}
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.score-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--bg-main);
 }
 
-/* Lưới tự động chia cột đều nhau. 
-   Lát nữa trong JS ta sẽ chèn style="grid-template-columns: repeat(n, 1fr);" */
-.score-grid-row {
-  display: grid;
-  gap: 6px;
-  padding: 0 8px;
-}
-
-/* --- HEADER NGƯỜI CHƠI --- */
 .player-header-cell {
   display: flex;
   flex-direction: column;
@@ -819,17 +637,15 @@ body {
   justify-content: center;
   padding: 10px 4px;
   border-radius: 8px;
+  min-width: 0;
+  overflow: hidden;
 }
-
-/* Nền cho người đang có điểm Dương/Hoà */
 .bg-positive {
-  background-color: #1c2c1e; /* Xanh rêu đậm */
+  background-color: #1c2c1e;
   border: 1px solid rgba(48, 209, 88, 0.15);
 }
-
-/* Nền cho người đang có điểm Âm */
 .bg-negative {
-  background-color: #321c1d; /* Đỏ tía đậm */
+  background-color: #321c1d;
   border: 1px solid rgba(255, 69, 58, 0.15);
 }
 
@@ -838,9 +654,14 @@ body {
   font-weight: 600;
   font-size: 15px;
   margin-bottom: 8px;
+  text-transform: uppercase;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
 }
 
-/* Cục Badge tổng điểm */
 .score-badge {
   padding: 2px 12px;
   border-radius: 12px;
@@ -850,38 +671,21 @@ body {
 }
 .badge-positive {
   background-color: #30d158;
-} /* Xanh lá iOS */
+}
 .badge-negative {
   background-color: #ff453a;
-} /* Đỏ iOS */
-
-/* --- CÁC HÀNG ĐIỂM TỪNG VÁN --- */
-.round-row-box {
-  flex: 1; /* QUAN TRỌNG: Ép tấm bạt chiếm phần không gian còn lại */
-  min-height: 0; /* QUAN TRỌNG: Khóa kích thước, không cho phình to */
-  overflow-y: auto; /* Bật thanh cuộn */
-  padding-bottom: 24px; /* Thêm một chút padding để ván cuối cùng không bị dính sát lề */
 }
+
 .round-row {
-  display: grid;
-  padding: 14px 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   cursor: pointer;
 }
-
-/* Nếu bạn muốn hàng chẵn/lẻ khác màu nhau cho dễ nhìn */
-.round-row.odd {
-  background-color: #1c1c1e;
-}
-.round-row.even {
-  background-color: transparent;
-}
-
 .score-cell {
   text-align: center;
   color: white;
   font-size: 15px;
   font-weight: 500;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .hint-text {
@@ -892,16 +696,13 @@ body {
   margin-top: 20px;
 }
 
-/* =========================================
-   BOTTOM ACTIONS (2 NÚT DƯỚI CÙNG)
-========================================= */
+/* Các nút gộp dưới đáy (Thêm ván / Kết thúc) */
 .bottom-actions-row {
   display: flex;
   gap: 12px;
   padding: 16px;
   padding-bottom: 32px;
 }
-
 .btn-action {
   flex: 1;
   padding: 14px;
@@ -916,24 +717,19 @@ body {
   gap: 8px;
   color: white;
 }
-
 .btn-end {
   background-color: #e24c4c;
-} /* Đỏ hồng */
+}
 .btn-add {
   background-color: #22c55e;
-} /* Xanh lá */
+}
 
 /* ====================================================
-   HACK ĐỘC QUYỀN CHO iOS SAFARI (CHỐNG DYNAMIC ISLAND)
+   8. HACK ĐỘC QUYỀN CHO iOS SAFARI (CHỐNG TAI THỎ LẸM)
    ==================================================== */
 @supports (-webkit-touch-callout: none) {
   .app-container {
-    /* Dynamic Island dày khoảng 47px, Tai thỏ khoảng 44px. 
-       Lệnh max() này ép Safari iOS LUÔN LUÔN lùi ít nhất 48px dù env() có bị lỗi bằng 0 */
     padding-top: max(48px, env(safe-area-inset-top)) !important;
-
-    /* Đẩy phần đáy (nút Thêm Ván) lên trên vạch Home Indicator của iPhone */
     padding-bottom: max(24px, env(safe-area-inset-bottom)) !important;
   }
 }

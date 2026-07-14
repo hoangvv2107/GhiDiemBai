@@ -48,7 +48,7 @@ export const game = () => {
 
   const btnBack = document.getElementById("btn-back");
   btnBack.addEventListener("click", () => {
-    router.navigate("/table-info");
+    router.navigate("/");
   });
 
   const btnSettings = document.getElementById("btn-settings");
@@ -73,35 +73,44 @@ export const game = () => {
   <p style="color: var(--text-secondary, #8E8E93); font-size: 14px; margin: 0;">Nhấn nút "Thêm ván" bên dưới để bắt đầu ghi điểm</p>
 </div>`;
 
-    let hasScore = `<div class="scoreboard-container" style="padding-top: 16px;">`;
+    let hasScore = `
+      <div class="scoreboard-container">
+        <table class="score-table">
+          <thead>
+            <tr>`;
 
-    let namePlayer = `
-  <div class="score-grid-row" style="grid-template-columns: repeat(${players.length}, 1fr);">`;
     for (const player of players) {
       const sum = sumTotalOfArr(player.score);
       const bgStatus = sum >= 0 ? "bg-positive" : "bg-negative";
       const bageStatus = sum >= 0 ? "badge-positive" : "badge-negative";
-      namePlayer += `
-    <div class="player-header-cell ${bgStatus}">
-      <div class="player-name-text">${player.namePlayer}</div>
-      <div class="score-badge ${bageStatus}">${sum}</div>
-    </div>`;
-    }
-    namePlayer += `</div>`;
-    hasScore += namePlayer;
 
-    let score = `<div class="round-row-box">`;
-    for (let i = round - 1; i >= 0; i--) {
-      score += `<div class="round-row" data-id="${i}" style="grid-template-columns: repeat(${players.length}, 1fr);">`;
-      for (const player of players) {
-        score += `<div class="score-cell">${player.score[i]}</div>`;
-      }
-      score += `</div>`;
+      hasScore += `
+              <th style="padding: 16px 4px; border: none; font-weight: normal;">
+                <div class="player-header-cell ${bgStatus}">
+                  <div class="player-name-text" title="${player.namePlayer}">${player.namePlayer}</div>
+                  <div class="score-badge ${bageStatus}">${sum}</div>
+                </div>
+              </th>`;
     }
-    score += `</div>`;
-    hasScore += score;
-    hasScore += `<div class="hint-text">Chạm vào ô để sửa điểm</div>
-          </div>`;
+
+    hasScore += `
+            </tr>
+          </thead>
+          <tbody>`;
+
+    for (let i = round - 1; i >= 0; i--) {
+      hasScore += `<tr class="round-row" data-id="${i}">`;
+      for (const player of players) {
+        hasScore += `<td class="score-cell">${player.score[i]}</td>`;
+      }
+      hasScore += `</tr>`;
+    }
+
+    hasScore += `
+          </tbody>
+        </table>
+        <div class="hint-text" style="padding-top: 16px;">Chạm vào ô để sửa điểm</div>
+      </div>`;
 
     const final = round > 0 ? hasScore : noScore;
     boardContent.innerHTML = final;
