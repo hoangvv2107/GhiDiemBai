@@ -99,15 +99,14 @@ export const tableInfo = () => {
   btnBack.addEventListener("click", () => {
     document.documentElement.classList.remove("unlock-scroll");
     document.body.classList.remove("unlock-scroll");
-    if (history.length > 2) history.back();
-    else router.navigate("/");
+    router.navigate("/");
   });
 
   const btnNext = document.getElementById("btn-next");
   btnNext.addEventListener("click", () => {
     const arrPlayerInput = document.querySelectorAll(".player-input");
     if (!nameBattle.value) {
-      alert("hãy nhập đầy đủ thông tin");
+      alert("Hãy nhập đầy đủ thông tin");
       return;
     }
     let isOk = true;
@@ -118,7 +117,7 @@ export const tableInfo = () => {
       }
     });
     if (!isOk) {
-      alert("hãy nhập đầy đủ thông tin");
+      alert("Hãy nhập đầy đủ thông tin");
       return;
     }
     const info = {};
@@ -129,6 +128,22 @@ export const tableInfo = () => {
 
     const settings = {};
     settings.endCondition = typePlay;
+    if (typePlay === "round") {
+      const inputValue = document.getElementById("max-round-input").value;
+      if (!inputValue) {
+        alert("Hãy nhập đầy đủ thông tin");
+        return;
+      }
+      settings.round = Number(inputValue);
+    }
+    if (typePlay === "score") {
+      const inputValue = document.getElementById("max-score-input").value;
+      if (!inputValue) {
+        alert("Hãy nhập đầy đủ thông tin");
+        return;
+      }
+      settings.score = Number(inputValue);
+    }
     settings.showTotalScore =
       document.getElementById("show-total-score").checked;
     settings.balanceScore = document.getElementById("balance-score").checked;
@@ -137,7 +152,7 @@ export const tableInfo = () => {
       const idPlayer = playerInput.getAttribute("data-id");
       const player = {};
       player.id = idPlayer;
-      player.namePlayer = playerInput.value;
+      player.namePlayer = playerInput.value.trim();
       player.score = [];
       players.push(player);
     });
@@ -229,7 +244,7 @@ export const tableInfo = () => {
     }
   });
 
-  let typePlay = "Manual";
+  let typePlay = "manual";
   const settingTab = document.querySelector(".setting-tabs");
   settingTab.addEventListener("click", (e) => {
     const btnTarget = e.target.closest(".s-tab");

@@ -9,7 +9,12 @@ export const game = () => {
     router.navigate("/");
     return;
   }
-
+  let status = dataGame.status;
+  if (status !== "playing") {
+    alert("Ván đấu đã kết thúc");
+    router.navigate("/");
+    return;
+  }
   let round = dataGame.players[0].score.length;
   const app = document.getElementById("app");
   app.innerHTML = `<div class="app-container" style="display: flex; flex-direction: column; height: 100vh;">
@@ -43,8 +48,7 @@ export const game = () => {
 
   const btnBack = document.getElementById("btn-back");
   btnBack.addEventListener("click", () => {
-    if (history.length > 2) history.back();
-    else router.navigate("/");
+    router.navigate("/table-info");
   });
 
   const btnSettings = document.getElementById("btn-settings");
@@ -128,7 +132,7 @@ export const game = () => {
   const btnEnd = document.getElementById("btn-end");
   btnEnd.style.display = round > 0 ? "flex" : "none";
   btnEnd.addEventListener("click", () => {
-    confirm("Ban co chac chan muon ket thuc");
+    confirm("Ban co chac chan muon ket thuc?");
   });
 
   const settings = dataGame.settings;

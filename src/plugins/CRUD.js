@@ -13,3 +13,12 @@ export const updateData = (game) => {
     postData(allData);
   } else throw new Error("Không tìm thấy dữ liệu!");
 };
+export const deleteData = (id) => {
+  let allData = getData();
+  if (allData) {
+    allData = allData.filter((data) => data.id !== id);
+    postData(allData);
+  } else {
+    throw new Error("Không tìm thấy dữ liệu!");
+  }
+};
