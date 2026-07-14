@@ -729,7 +729,11 @@ body {
    ==================================================== */
 @supports (-webkit-touch-callout: none) {
   .app-container {
-    padding-top: max(48px, env(safe-area-inset-top)) !important;
-    padding-bottom: max(24px, env(safe-area-inset-bottom)) !important;
+    /* Dynamic Island dày khoảng 47px, Tai thỏ khoảng 44px. 
+       Lệnh max() này ép Safari iOS LUÔN LUÔN lùi ít nhất 48px dù env() có bị lỗi bằng 0 */
+    padding-top: max(24px, env(safe-area-inset-top)) !important;
+
+    /* Đẩy phần đáy (nút Thêm Ván) lên trên vạch Home Indicator của iPhone */
+    /* padding-bottom: max(24px, env(safe-area-inset-bottom)) !important; */
   }
 }
